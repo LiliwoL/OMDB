@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <!-- Affichage formulaire de recherche -->
+        {% include 'omdb/formulaire.html.twig' %}
+
+        <!-- Affichage des détails d'un film -->
+        <div class="row">
+            <h1>Fiche détaillée du film: <b>{{movie.Title}}</b></h1>
+            
+            <div class="row">
+                <div class="col">
+                    <span class="badge badge-primary badge-pill">{{ movie.Year }}</span>
+                    <b>{{ movie.Title}}</b>
+
+                    <img 
+                        src="{{ movie.Poster }}" 
+                        title="{{ movie.Title|escape( 'html_attr' ) }}"
+                        class="rounded img-thumbnail"
+                    />
+
+                    Moyenne des notes: {{ moyenne }}
+                </div>
+
+                <div class="col">
+                    <div class="row">
+                        <!-- Formulaire de partage par mail -->
+                        <form action="{{ url('Partage de film') }}" method="post">
+                            <!-- Email du destinataire -->
+                            <input type="email" name="emailDestinataire" />
+        
+                            <!-- Champ Caché comprenant l'id du FILM -->
+                            <input type="hidden" name="imdbID" value="{{ movie.imdbID }}" />
+        
+                            <!-- Button à styliser par CSS -->
+                            <button>Partager par Mail</button>
+                        </form>
+                    </div>
+
+                    <div class="row">
+                        <!-- Lien vers un nouveau vote -->
+                        <a href="{{ url('Nouveau Vote', { "imdbID": movie.imdbID, "note": 5 }) }}" class="btn btn-danger">
+                            Nouveau vote STATIQUE pour ce film
+                        </a>
+                    </div>
+
+                    <div class="row">
+                        <!-- Formulaire de vote -->
+
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#voteModal">
+                            Voter
+                        </button>
+                                    
+                        <!-- Modal -->
+                        <div class="modal fade" id="voteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{{ url('Nouveau Vote par Formulaire') }}" method="post">
+                                            <!-- Email du destinataire -->
+                                            <div class="form-group">
+                                                <label for="note">Note:</label>
+                                                <select class="form-control" id="note" name="note">
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                </select>
+                                            </div>
+                        
+                                            <!-- Champ Caché comprenant l'id du FILM -->
+                                            <input type="hidden" name="imdbID" value="{{ movie.imdbID }}" />
+                        
+                                            <!-- Button à styliser par CSS -->
+                                            <button>Voter</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+        </div>
+    </div>
+{% endblock %}

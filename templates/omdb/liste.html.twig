@@ -1,0 +1,35 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <!-- Affichage formulaire de recherche -->
+        {% include 'omdb/formulaire.html.twig' %}
+
+        <!-- Affichage d'une liste de films -->
+        <div class="row">
+            <h1>Liste des films: <b>{{query}}</b></h1>
+            
+            <div class="row">
+                {% for movie in movies %}
+                    <div class="col">
+                        <span class="badge badge-primary badge-pill">{{ movie.Year }}</span>
+                        <b>{{ movie.Title}}</b>
+
+                        <img 
+                            src="{{ movie.Poster }}" 
+                            title="{{ movie.Title|escape( 'html_attr' ) }}"
+                            class="rounded img-thumbnail"
+                        />
+
+                        <a href="{{ url('Fiche détaillée', {idFilm: movie.imdbID} ) }}">Fiche détaillée</a>
+                    </div>
+
+                    {# Breaking the line #}
+                    {% if loop.index == 8 %}
+                        <div class="w-100"></div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
